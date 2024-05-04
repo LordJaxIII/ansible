@@ -25,13 +25,13 @@
   handlers:
     - name: Notify Success
       uri:
-        url: "https://gf.lrdjx.nl/message?token=A4dy7WXIAESxtLa"
+        url: "https://gf.lrdjx.nl/api/v1/message?token=A4dy7WXIAESxtLa"
         method: POST
         body: "title=Ansible%20Playbook%20Success&message=All%20specified%20packages%20were%20installed%20successfully."
 
     - name: Notify Failure
       uri:
-        url: "https://gf.lrdjx.nl/message?token=A4dy7WXIAESxtLa"
+        url: "https://gf.lrdjx.nl/api/v1/message?token=A4dy7WXIAESxtLa"
         method: POST
         body: "title=Ansible%20Playbook%20Failure&message=Something%20went%20wrong%20during%20the%20installation%20of%20specified%20packages.%20Please%20check%20the%20logs."
       when: ansible_failed_result | bool or ansible_play_batch | skipped | bool
