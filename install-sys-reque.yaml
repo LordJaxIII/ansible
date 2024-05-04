@@ -1,5 +1,5 @@
 ---
-- name: Install System Monitoring Tools
+- name: Install System Tools
   hosts: all
   become: true
   
