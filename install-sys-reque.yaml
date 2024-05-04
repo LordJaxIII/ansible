@@ -1,0 +1,20 @@
+---
+- name: Install System Monitoring Tools
+  hosts: all
+  become: true
+  
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install htop, bpytop, neofetch, tree, and nload packages
+      apt:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - htop
+        - bpytop
+        - neofetch
+        - tree
+        - nload
