@@ -1,6 +1,6 @@
 ---
 - name: Setup new system
-  hosts: your_server
+  hosts: all
   become: yes
 
   tasks:
