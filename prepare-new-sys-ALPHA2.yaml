@@ -14,8 +14,8 @@
    #     src: "/root/ssh/{{ item }}"
    #     dest: "/root/ssh/{{ item }}"
    #   with_items:
-        - ansible_key
-        - your_own_ssh_key
+   #     - ansible_key
+   #     - your_own_ssh_key
       # Optionally, you can restrict permissions on the SSH keys
       # file: "{{ item }}"
       # mode: '0600'
