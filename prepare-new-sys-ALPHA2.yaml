@@ -1,0 +1,52 @@
+---
+- name: Setup new system
+  hosts: your_server
+  become: yes
+
+  tasks:
+    - name: Update package repositories and upgrade packages
+      apt:
+        upgrade: yes
+        update_cache: yes
+
+   # - name: Copy Ansible and SSH keys from Ansible host
+   #   copy:
+   #     src: "/root/ssh/{{ item }}"
+   #     dest: "/root/ssh/{{ item }}"
+   #   with_items:
+        - ansible_key
+        - your_own_ssh_key
+      # Optionally, you can restrict permissions on the SSH keys
+      # file: "{{ item }}"
+      # mode: '0600'
+      # owner: root
+      # group: root
+
+    - name: Install Docker
+      apt:
+        name: docker.io
+        state: latest
+
+    - name: Create Docker network
+      command: docker network create static
+
+    - name: Change SSH port to a random port between 2000 and 5000
+      replace:
+        path: /etc/ssh/sshd_config
+        regexp: 'Port [0-9]+'
+        replace: 'Port {{ ansible_play_hosts_all | random(start=2000, end=5000) }}'
+
+    - name: Disable Password Authentication
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^PasswordAuthentication'
+        line: 'PasswordAuthentication no'
+
+    - name: Display new SSH port
+      debug:
+        msg: "New SSH Port: {{ ansible_ssh_port }}"
+
+    - name: Restart SSH service
+      service:
+        name: ssh
+        state: restarted
