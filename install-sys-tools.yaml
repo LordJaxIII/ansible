@@ -1,5 +1,5 @@
 ---
-- name: Install System Tools
+- name: Install System some System Tools
   hosts: all
   become: true
   
@@ -8,7 +8,7 @@
       apt:
         update_cache: yes
 
-    - name: Install htop, bpytop, neofetch, tree, and nload packages
+    - name: Install System Tools
       apt:
         name: "{{ item }}"
         state: present
