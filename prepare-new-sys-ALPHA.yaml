@@ -1,0 +1,43 @@
+---
+- name: Prepare Docker System
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Update apt cache and upgrade system
+      apt:
+        upgrade: dist
+        update_cache: yes
+
+    - name: Change SSH Port to a random number between 2000 and 5000
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^Port\s+'
+        line: 'Port {{ new_ssh_port }}'
+      vars:
+        new_ssh_port: "{{ ansible_play_hosts_all | random(start=2000, end=5000) }}"
+      notify: 
+        - Restart SSH Service
+        - Display SSH Port
+
+    - name: Disable Password Authentication in SSH
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^PasswordAuthentication\s+'
+        line: 'PasswordAuthentication no'
+      notify: Restart SSH Service
+
+    - name: Copy SSH Public Key to authorized_keys
+      authorized_key:
+        user: "{{ ansible_user }}"
+        key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+
+  handlers:
+    - name: Restart SSH Service
+      service:
+        name: ssh
+        state: restarted
+
+    - name: Display SSH Port
+      debug:
+        msg: "SSH port is set to {{ new_ssh_port }}"
