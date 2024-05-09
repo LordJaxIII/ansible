@@ -12,3 +12,6 @@
       when: ansible_pkg_mgr == 'apt'
       ansible.builtin.apt:
         upgrade: dist
+        
+    - name: Run apt autoremove
+      command: apt autoremove -y
